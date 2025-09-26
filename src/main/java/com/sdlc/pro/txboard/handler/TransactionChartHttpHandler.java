@@ -1,9 +1,9 @@
 package com.sdlc.pro.txboard.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdlc.pro.txboard.dto.TransactionChart;
 import com.sdlc.pro.txboard.model.DurationDistribution;
 import com.sdlc.pro.txboard.repository.TransactionLogRepository;
+import com.sdlc.pro.txboard.util.ObjectMapperUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,10 +15,10 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class TransactionChartHttpHandler implements HttpRequestHandler {
-    private final ObjectMapper objectMapper;
+    private final Object objectMapper;
     private final TransactionLogRepository transactionLogRepository;
 
-    public TransactionChartHttpHandler(ObjectMapper objectMapper, TransactionLogRepository transactionLogRepository) {
+    public TransactionChartHttpHandler(Object objectMapper, TransactionLogRepository transactionLogRepository) {
         this.objectMapper = objectMapper;
         this.transactionLogRepository = transactionLogRepository;
     }
@@ -31,7 +31,7 @@ public class TransactionChartHttpHandler implements HttpRequestHandler {
         List<DurationDistribution> durationDistributions = transactionLogRepository.getDurationDistributions();
         TransactionChart chartData = new TransactionChart(durationDistributions);
 
-        String json = objectMapper.writeValueAsString(chartData);
+        String json = ObjectMapperUtils.mapAsJsonString(objectMapper, chartData);
         writer.write(json);
         writer.flush();
     }

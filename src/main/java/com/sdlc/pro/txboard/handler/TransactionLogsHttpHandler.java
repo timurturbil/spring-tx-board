@@ -1,11 +1,11 @@
 package com.sdlc.pro.txboard.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdlc.pro.txboard.enums.IsolationLevel;
 import com.sdlc.pro.txboard.enums.PropagationBehavior;
 import com.sdlc.pro.txboard.enums.TransactionPhaseStatus;
 import com.sdlc.pro.txboard.domain.*;
 import com.sdlc.pro.txboard.repository.TransactionLogRepository;
+import com.sdlc.pro.txboard.util.ObjectMapperUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -18,10 +18,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TransactionLogsHttpHandler implements HttpRequestHandler {
-    private final ObjectMapper objectMapper;
+    private final Object objectMapper;
     private final TransactionLogRepository transactionLogRepository;
 
-    public TransactionLogsHttpHandler(ObjectMapper objectMapper, TransactionLogRepository transactionLogRepository) {
+    public TransactionLogsHttpHandler(Object objectMapper, TransactionLogRepository transactionLogRepository) {
         this.objectMapper = objectMapper;
         this.transactionLogRepository = transactionLogRepository;
     }
@@ -45,7 +45,7 @@ public class TransactionLogsHttpHandler implements HttpRequestHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = response.getWriter();
 
-        String json = objectMapper.writeValueAsString(pageResponse);
+        String json = ObjectMapperUtils.mapAsJsonString(objectMapper, pageResponse);
         writer.write(json);
         writer.flush();
     }
